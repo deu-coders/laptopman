@@ -28,7 +28,7 @@ CREATE TABLE 프로그램지원운영체제(
 -- CPU와 해당되는 벤치마크 점수가 저장되는 테이블
 --
 CREATE TABLE CPU(
-    CPU이름 VARCHAR2(30) PRIMARY KEY,
+    CPU이름 VARCHAR2(80) PRIMARY KEY,
     아키텍쳐 VARCHAR2(20) NOT NULL,
     브랜드 VARCHAR2(20) NOT NULL,
     벤치마크점수 NUMBER,
@@ -39,7 +39,7 @@ CREATE TABLE CPU(
 -- GPU와 해당되는 벤치마크 점수가 저장되는 테이블
 --
 CREATE TABLE GPU(
-    GPU이름 VARCHAR2(30) PRIMARY KEY,
+    GPU이름 VARCHAR2(80) PRIMARY KEY,
     브랜드 VARCHAR2(20) NOT NULL,
     벤치마크점수 NUMBER,
     벤치마크출처 VARCHAR2(50)
@@ -69,7 +69,7 @@ CREATE TABLE 제품정보(
     등록일 DATE,
     CPU이름 VARCHAR2(30) REFERENCES CPU(CPU이름),
     GPU이름 VARCHAR2(30) REFERENCES GPU(GPU이름),
-    RAM NUMBER,
+    RAM NUMBER NOT NULL,
     운영체제이름 VARCHAR2(30) REFERENCES 운영체제(운영체제이름),
     화면크기 VARCHAR2(20),
     화면비율 VARCHAR2(20),
@@ -291,9 +291,9 @@ END;
 -- 마인크래프트 | 권장사양 | 0
 --
 CREATE OR REPLACE PROCEDURE SP_적합프로그램목록(
-    V_CPU이름 CPU.CPU이름%TYPE,
-    V_GPU이름 GPU.GPU이름%TYPE,
-    V_RAM NUMBER,
+    V_CPU이름 IN CPU.CPU이름%TYPE,
+    V_GPU이름 IN GPU.GPU이름%TYPE,
+    V_RAM IN NUMBER,
     V_RESULT OUT SYS_REFCURSOR
 )
 AS
@@ -310,8 +310,8 @@ BEGIN
                     CPU.벤치마크점수 <= V_CPU벤치마크점수
                     AND GPU.벤치마크점수 <= V_GPU벤치마크점수
                     AND RAM <= V_RAM
-                ) THEN '1'
-                ELSE '0'
+                ) THEN '적합'
+                ELSE '부적합'
             END AS "적합"
     FROM 프로그램사양
         INNER JOIN CPU ON CPU.CPU이름 = 프로그램사양.CPU이름
@@ -336,4 +336,23 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE(V_프로그램이름 || '-' || V_세부사항 || ': ' || V_적합);
     END LOOP;
     CLOSE V_CURSOR;
+END;
+
+
+
+
+
+--
+-- 프로그램사양ID 목록을 주면 해당 사양들에 모두 적합한 노트북 목록을 출력하는 프로시저
+--
+-- 입력은 1,2,5,8 과 같은 식으로, 하나의 문자열로 전달되어야 한다.
+-- 출력은 cursor로 
+--
+CREATE OR REPLACE PROCEDURE SP_다중프로그램적합노트북목록(
+    V_프로그램사양ID목록 IN VARCHAR(200),
+    V_CURSOR OUT SYS_REFCURSOR
+)
+AS
+BEGIN
+    -- NOT IMPLEMENTED YET
 END;
