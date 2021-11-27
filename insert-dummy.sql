@@ -1,10 +1,17 @@
+--
+-- Note!
+--
+-- This SQL file is written for test purpose.
+-- Please generate SQL file using laptopman_crawler/cralwer.py and use it.
+--
+
 INSERT INTO 프로그램 VALUES('마인크래프트', '잼민이들이 환장하는 게임', 'https://cdn.icon-icons.com/icons2/2699/PNG/512/minecraft_logo_icon_168974.png');
 INSERT INTO 프로그램 VALUES('서든어택', '넥슨에서 만든 플래시 총 게임', 'https://lh3.googleusercontent.com/proxy/BxN2JQX1ZxbzbRDevtjXutSyds-GrMvjgNwLfbaTj7RCufeQ2zkil625_PMbothycbQIVRbrdxzciA-iWWrizh5h38_dyq9hE_Z_M69rt4eL6SCPfgWKfh0w');
-INSERT INTO 프로그램 VALUES('메이플스토리', '대한민국 1티어였던 게임 그러나 지금은 아님', 'https://t1.daumcdn.net/cfile/tistory/99718D3359C47D6233');
-INSERT INTO 프로그램 VALUES('당근마켓', '네고를 사용하여 아이템을 최대한 저렴하게 구매하라!', NULL);
+INSERT INTO 프로그램 VALUES('메이플스토리', '대한민국 1티어였던 게임 그러나 지금은', 'https://t1.daumcdn.net/cfile/tistory/99718D3359C47D6233');
+INSERT INTO 프로그램 VALUES('당근마켓', '네고왕! 아이템을 최대한 저렴하게 구매하라!', NULL);
 INSERT INTO 프로그램 VALUES('롤', '팀원들과 협동하여 새로운 언어들을 학습해보자.', NULL);
-INSERT INTO 프로그램 VALUES('지뢰찾기', '어린 시절, 컴퓨터실의 영웅 지뢰찾기', NULL);
-INSERT INTO 프로그램 VALUES('핀볼', '자네 핀볼 좀 치나?', NULL);
+INSERT INTO 프로그램 VALUES('지뢰찾기', '어린 시절, 컴퓨터실의', NULL);
+INSERT INTO 프로그램 VALUES('핀볼', '공치기 게임', NULL);
 
 INSERT INTO 운영체제 VALUES('Windows');
 INSERT INTO 운영체제 VALUES('Mac OS');
