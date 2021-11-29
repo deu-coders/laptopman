@@ -5,7 +5,7 @@
 -- Oracle 18c에서 계정을 생성하기 전 반드시 실행
 ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
 
--- LAPTOPMAN 계정 생성
+-- LAPTOPMAN 계정 생성 (패스워드는 임의로 설정할 것)
 CREATE USER LAPTOPMAN IDENTIFIED BY "PASSWORD";
 
 -- 세션 생성, 접속, 객체(테이블, 뷰 등) 생성 DB 권한 부여
