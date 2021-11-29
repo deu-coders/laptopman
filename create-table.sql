@@ -303,7 +303,8 @@ BEGIN
     SELECT 벤치마크점수 INTO V_CPU벤치마크점수 FROM CPU WHERE CPU이름 = V_CPU이름;
     SELECT 벤치마크점수 INTO V_GPU벤치마크점수 FROM GPU WHERE GPU이름 = V_GPU이름;
 
-    OPEN V_RESULT FOR
+    OPEN V_RESULT
+    FOR
     SELECT 프로그램이름,
             세부사항,
             CASE WHEN (
@@ -346,13 +347,81 @@ END;
 -- 프로그램사양ID 목록을 주면 해당 사양들에 모두 적합한 노트북 목록을 출력하는 프로시저
 --
 -- 입력은 1,2,5,8 과 같은 식으로, 하나의 문자열로 전달되어야 한다.
--- 출력은 cursor로 
 --
+-- 출력은 cursor로 전달된다. 결과 값은 아래와 같다.
+--
+-- 15010340 | MSI GF시리즈 Sword GF76 A11UD 블랙 32GB램 | Intel Core i7-11800H | GeForce RTX 3050 Ti Laptop GPU | 32768
+-- 15287000 | MSI 크리에이터 15 A11UE WIN10 64GB램 | Intel Core i7-11800H | GeForce RTX 3060 Ti | 65536
+-- 15140024 | MSI GF시리즈 Sword GF76 A11SC 블랙 64GB램 | Intel Core i7-11800H | GeForce GTX 1650 | 65536
+-- 15151349 | MSI GF시리즈 Sword GF76 A11SC 화이트 WIN10 64GB램 | Intel Core i7-11800H | GeForce GTX 1650 | 65536
+-- 13782290 | Razer BLADE 15 Advanced 10Gen R3080 FHD | Intel Core i7-10875H | GeForce RTX 3080 | 32768
+-- 14870228 | MSI GF시리즈 Sword GF66 A11SC-i5 화이트 32GB램 | Intel Core i5-11400H | GeForce GTX 1650 | 32768
+-- 14816873 | 레노버 게이밍 3i 15IHU i7 3050 | Intel Core i7-11370H | GeForce RTX 3050 Ti Laptop GPU | 8192
+--
+CREATE OR REPLACE TYPE 프로그램사양ID목록 IS VARRAY(100) OF NUMBER NOT NULL;
+
 CREATE OR REPLACE PROCEDURE SP_다중프로그램적합노트북목록(
-    V_프로그램사양ID목록 IN VARCHAR(200),
+    V_프로그램사양ID목록 IN 프로그램사양ID목록,
     V_CURSOR OUT SYS_REFCURSOR
 )
 AS
+    V_CPU_REQUIRE NUMBER;
+    V_GPU_REQUIRE NUMBER;
+    V_RAM_REQUIRE NUMBER;
 BEGIN
-    -- NOT IMPLEMENTED YET
+        -- 입력으로 주어진 프로그램사양ID 목록을 사용하여
+        -- 이들을 모두 만족하는 CPU, GPU 최대 벤치마크 점수를 구한다.
+        SELECT DISTINCT
+            FIRST_VALUE(CPU.벤치마크점수) OVER (ORDER BY CPU.벤치마크점수 DESC) "CPU",
+            FIRST_VALUE(GPU.벤치마크점수) OVER (ORDER BY GPU.벤치마크점수 DESC) "GPU",
+            FIRST_VALUE(RAM) OVER (ORDER BY RAM DESC) "RAM"
+        INTO
+            V_CPU_REQUIRE, V_GPU_REQUIRE, V_RAM_REQUIRE
+        FROM 프로그램사양
+            INNER JOIN CPU ON CPU.CPU이름 = 프로그램사양.CPU이름
+            INNER JOIN GPU ON GPU.GPU이름 = 프로그램사양.GPU이름
+        WHERE 프로그램사양ID IN
+            (SELECT COLUMN_VALUE FROM TABLE(V_프로그램사양ID목록));
+        
+        -- 제품정보 데이터에서 CPU, GPU, RAM 요구사항을 만족하는
+        -- 노트북 목록 검색, 이를 커서로 연결하여 사용자에게
+        -- 테이블 형태로 반환
+        OPEN V_CURSOR
+        FOR
+        SELECT 제품정보ID, 제품이름, 제품정보.CPU이름, 제품정보.GPU이름, RAM
+        FROM 제품정보
+            INNER JOIN CPU ON CPU.CPU이름 = 제품정보.CPU이름
+            INNER JOIN GPU ON GPU.GPU이름 = 제품정보.GPU이름
+        WHERE
+            CPU.벤치마크점수 >= V_CPU_REQUIRE
+            AND GPU.벤치마크점수 >= V_GPU_REQUIRE
+            AND RAM >= V_RAM_REQUIRE;
+END;
+
+
+DECLARE
+    V_CURSOR SYS_REFCURSOR;
+    V_프로그램사양ID목록 프로그램사양ID목록;
+    
+    V_제품정보ID 제품정보.제품정보ID%TYPE;
+    V_제품이름 제품정보.제품이름%TYPE;
+    V_CPU이름 CPU.CPU이름%TYPE;
+    V_GPU이름 GPU.GPU이름%TYPE;
+    V_RAM 제품정보.RAM%TYPE;
+BEGIN
+    -- 64: 원신 권장사양
+    -- 83: 던전앤파이터 최소사양
+    -- 62: 리그오브레전드 최소사양
+    -- 87: 마인크래프트 최소사양
+    V_프로그램사양ID목록 := 프로그램사양ID목록(65, 83, 62, 87);
+
+    SP_다중프로그램적합노트북목록(V_프로그램사양ID목록, V_CURSOR);
+    
+    LOOP
+        FETCH V_CURSOR INTO V_제품정보ID, V_제품이름, V_CPU이름, V_GPU이름, V_RAM;
+        EXIT WHEN V_CURSOR%NOTFOUND;
+        
+        DBMS_OUTPUT.PUT_LINE(V_제품정보ID || ' | ' || V_제품이름 || ' | ' || V_CPU이름 || ' | ' || V_GPU이름 || ' | ' || V_RAM);
+    END LOOP;
+    CLOSE V_CURSOR;
 END;
