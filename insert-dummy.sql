@@ -26,32 +26,30 @@ INSERT INTO 프로그램지원운영체제 VALUES('메이플스토리', 'Windows
 
 INSERT INTO CPU VALUES('4500U', 'x86', 'AMD', 4769, 'Geekbench Multi-Core');
 INSERT INTO CPU VALUES('4700U', 'x86', 'AMD', 5520, 'Geekbench Multi-Core');
-INSERT INTO CPU VALUES('i5-10210U', 'x86', 'Intel', 2969, 'Geekbench Multi-Core');
-INSERT INTO CPU VALUES('E6300', 'x86', 'Intel', 437, 'Geekbench Multi-Core');
-INSERT INTO CPU VALUES('E8400', 'x86', 'Intel', 713, 'Geekbench Multi-Core');
-INSERT INTO CPU VALUES('E6600', 'x86', 'Intel', 546, 'Geekbench Multi-Core');
-INSERT INTO CPU VALUES('i3-3210', 'x86', 'Intel', 575, 'Geekbench Multi-Core');
-INSERT INTO CPU VALUES('i5-4690', 'x86', 'Intel', 2909, 'Geekbench Multi-Core');
+INSERT INTO CPU VALUES('Intel Core i5-10210U', 'x86', 'Intel', 2969, 'Geekbench Multi-Core');
+INSERT INTO CPU VALUES('Intel Core 2 Duo E6300', 'x86', 'Intel', 437, 'Geekbench Multi-Core');
+INSERT INTO CPU VALUES('Intel Core 2 Duo E8400', 'x86', 'Intel', 713, 'Geekbench Multi-Core');
+INSERT INTO CPU VALUES('Intel Core 2 Duo E6600', 'x86', 'Intel', 546, 'Geekbench Multi-Core');
+INSERT INTO CPU VALUES('Intel Core i3-3210', 'x86', 'Intel', 575, 'Geekbench Multi-Core');
+INSERT INTO CPU VALUES('Intel Core i5-4690', 'x86', 'Intel', 2909, 'Geekbench Multi-Core');
 
 INSERT INTO GPU VALUES('RTX 2080', 'Nvidia', 25914, '3DMark Fire Strike');
 INSERT INTO GPU VALUES('GTX 1080', 'Nvidia', 20791, '3DMark Fire Strike');
 INSERT INTO GPU VALUES('RTX 2070', 'Nvidia', 19979, '3DMark Fire Strike');
 INSERT INTO GPU VALUES('GTX 1070', 'Nvidia', 16836, '3DMark Fire Strike');
 INSERT INTO GPU VALUES('GTX 1660 Ti', 'Nvidia', 14684, '3DMark Fire Strike');
-INSERT INTO GPU VALUES('Intel HD Graphics 4000', 'Intel', 554, '3DMark Fire Strike');
-INSERT INTO GPU VALUES('GT 710', 'Nvidia', 989, '3DMark Fire Strike');
-INSERT INTO GPU VALUES('Geforce 6600 GT', 'Nvidia', 200, '3DMark Fire Strike');
-INSERT INTO GPU VALUES('Geforce 7600 GT', 'Nvidia', 300, '3DMark Fire Strike');
-INSERT INTO GPU VALUES('Geforce 9600 GT', 'Nvidia', 350, '3DMark Fire Strike');
+INSERT INTO GPU VALUES('Intel(R) HD Graphics 4000', 'Intel', 554, '3DMark Fire Strike');
+INSERT INTO GPU VALUES('GeForce GT 710', 'Nvidia', 989, '3DMark Fire Strike');
+INSERT INTO GPU VALUES('GeForce GT 710M', 'Nvidia', 300, '3DMark Fire Strike');
 
-INSERT INTO 프로그램사양 VALUES(0, '마인크래프트', '최소사양', 'i3-3210', 'Intel HD Graphics 4000', 2048);
-INSERT INTO 프로그램사양 VALUES(0, '마인크래프트', '권장사양', 'i5-4690', 'GT 710', 4096);
-INSERT INTO 프로그램사양 VALUES(0, '서든어택', '최소사양', 'E6300', 'Geforce 7600 GT', 2048);
-INSERT INTO 프로그램사양 VALUES(0, '서든어택', '권장사양', 'E8400', 'Geforce 9600 GT', 4096);
-INSERT INTO 프로그램사양 VALUES(0, '메이플스토리', '권장사양', 'E6600', 'Geforce 6600 GT', 4096);
+INSERT INTO 프로그램사양 VALUES(0, '마인크래프트', '최소사양', 'Intel Core i3-3210', 'Intel(R) HD Graphics 4000', 2048);
+INSERT INTO 프로그램사양 VALUES(0, '마인크래프트', '권장사양', 'Intel Core i5-4690', 'GeForce GT 710', 4096);
+INSERT INTO 프로그램사양 VALUES(0, '서든어택', '최소사양', 'Intel Core 2 Duo E6300', 'GeForce GT 710M', 2048);
+INSERT INTO 프로그램사양 VALUES(0, '서든어택', '권장사양', 'Intel Core 2 Duo E8400', 'GeForce GT 710M', 4096);
+INSERT INTO 프로그램사양 VALUES(0, '메이플스토리', '권장사양', 'Intel Core 2 Duo E6600', 'GeForce GT 710M', 4096);
 
-INSERT INTO 제품정보 VALUES('1', '레노버 보급형', NULL, '레노버', '2021-11-01', 'i5-10210U', 'Intel HD Graphics 4000', 2048, 'Windows', '15.6', '16:9', '1920x1080', '2Kg');
-INSERT INTO 제품정보 VALUES('2', '레노버 중급형', NULL, '레노버', '2021-10-01', 'i5-10210U', 'Intel HD Graphics 4000', 4096, 'Windows', '15.6', '16:9', '1920x1080', '1.8Kg');
+INSERT INTO 제품정보 VALUES('1', '레노버 보급형', NULL, '레노버', '2021-11-01', 'Intel Core i5-10210U', 'Intel(R) HD Graphics 4000', 2048, 'Windows', '15.6', '16:9', '1920x1080', '2Kg');
+INSERT INTO 제품정보 VALUES('2', '레노버 중급형', NULL, '레노버', '2021-10-01', 'Intel Core i5-10210U', 'Intel(R) HD Graphics 4000', 4096, 'Windows', '15.6', '16:9', '1920x1080', '1.8Kg');
 INSERT INTO 제품정보 VALUES('3', '삼성 고급형', NULL, '삼성', '2021-09-01', '4700U', 'GTX 1070', 8192, 'Windows', '15.6', '16:9', '1920x1080', '1.6Kg');
 INSERT INTO 제품정보 VALUES('4', '맥북', NULL, '애플', '2021-05-01', '4500U', 'RTX 2070', 8192, 'Mac OS', '13', '16:10', '2560x1600', '1.3Kg');
 
