@@ -268,9 +268,11 @@ END;
 DECLARE
     V_AVAILABLES VARCHAR(200);
 BEGIN
-    SP_사양판정('마인크래프트', '4500U', 'GTX 1070', 8192, V_AVAILABLES);
-    
-    DBMS_OUTPUT.PUT_LINE(V_AVAILABLES);
+    SP_사양판정('마인크래프트', 'Intel Core i3-4370', 'GeForce GTX 1070', 8192, V_AVAILABLES);
+    DBMS_OUTPUT.PUT_LINE('Intel Core i3-4370, GeForce GTX 1070, 8GB RAM 에서 구동 가능한 옵션은: ' || V_AVAILABLES);
+
+    SP_사양판정('마인크래프트', 'Intel Core i7-8700', 'GeForce GTX 1070', 8192, V_AVAILABLES);
+    DBMS_OUTPUT.PUT_LINE('Intel Core i7-8700, GeForce GTX 1070, 8GB RAM 에서 구동 가능한 옵션은: ' || V_AVAILABLES);
 END;
 
 
@@ -326,9 +328,9 @@ DECLARE
     V_CURSOR SYS_REFCURSOR;
     V_프로그램이름 프로그램.프로그램이름%TYPE;
     V_세부사항 프로그램사양.세부사항%TYPE;
-    V_적합 CHAR(1);
+    V_적합 NVARCHAR2(6);
 BEGIN
-    SP_적합프로그램목록('4500U', 'GTX 1070', 8192, V_CURSOR);
+    SP_적합프로그램목록('Intel Core i5-2500', 'GeForce GTX 750 Ti', 8192, V_CURSOR);
     
     LOOP
         FETCH V_CURSOR INTO V_프로그램이름, V_세부사항, V_적합;
