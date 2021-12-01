@@ -346,7 +346,7 @@ END;
 --
 -- 프로그램사양ID 목록을 주면 해당 사양들에 모두 적합한 노트북 목록을 출력하는 프로시저
 --
--- 입력은 1,2,5,8 과 같은 식으로, 하나의 문자열로 전달되어야 한다.
+-- 입력은 '1,2,5,8' 과 같은 식으로, 하나의 문자열로 전달되어야 한다.
 --
 -- 출력은 cursor로 전달된다. 결과 값은 아래와 같다.
 --
@@ -360,8 +360,27 @@ END;
 --
 CREATE OR REPLACE TYPE 프로그램사양ID목록 IS VARRAY(100) OF NUMBER NOT NULL;
 
+--
+-- 컴마(,)로 구분된 문자열을 NUMBER ARRAY로 변환하는 함수
+--
+-- 입력: 1,2,3,5,9
+-- 출력: (1,2,3,5,9) (파싱됨)
+--
+CREATE OR REPLACE FUNCTION F_프로그램사양ID목록파싱(V_VALUES VARCHAR2) RETURN 프로그램사양ID목록 PIPELINED
+AS
+BEGIN
+    -- 정규식을 사용하여 컴마(,) 기준으로 숫자들을 분리 및 PIPE
+    FOR C IN (SELECT REGEXP_SUBSTR(V_VALUES, '[^,]+', 1, LEVEL) "VALUE"
+                FROM DUAL
+                CONNECT BY REGEXP_SUBSTR(V_VALUES, '[^,]+', 1, LEVEL) IS NOT NULL)
+    LOOP
+        PIPE ROW(TO_NUMBER(C.VALUE));
+    END LOOP;
+    RETURN;
+END;
+
 CREATE OR REPLACE PROCEDURE SP_다중프로그램적합노트북목록(
-    V_프로그램사양ID목록 IN 프로그램사양ID목록,
+    V_프로그램사양ID목록RAW IN VARCHAR,
     V_CURSOR OUT SYS_REFCURSOR
 )
 AS
@@ -380,8 +399,8 @@ BEGIN
         FROM 프로그램사양
             INNER JOIN CPU ON CPU.CPU이름 = 프로그램사양.CPU이름
             INNER JOIN GPU ON GPU.GPU이름 = 프로그램사양.GPU이름
-        WHERE 프로그램사양ID IN
-            (SELECT COLUMN_VALUE FROM TABLE(V_프로그램사양ID목록));
+        WHERE 프로그램사양ID
+            IN (SELECT * FROM TABLE(F_프로그램사양ID목록파싱(V_프로그램사양ID목록RAW)));
         
         -- 제품정보 데이터에서 CPU, GPU, RAM 요구사항을 만족하는
         -- 노트북 목록 검색, 이를 커서로 연결하여 사용자에게
@@ -401,7 +420,7 @@ END;
 
 DECLARE
     V_CURSOR SYS_REFCURSOR;
-    V_프로그램사양ID목록 프로그램사양ID목록;
+    V_프로그램사양ID목록 VARCHAR(200);
     
     V_제품정보ID 제품정보.제품정보ID%TYPE;
     V_제품이름 제품정보.제품이름%TYPE;
@@ -413,7 +432,7 @@ BEGIN
     -- 83: 던전앤파이터 최소사양
     -- 62: 리그오브레전드 최소사양
     -- 87: 마인크래프트 최소사양
-    V_프로그램사양ID목록 := 프로그램사양ID목록(65, 83, 62, 87);
+    V_프로그램사양ID목록 := '65,83,62,87';
 
     SP_다중프로그램적합노트북목록(V_프로그램사양ID목록, V_CURSOR);
     
