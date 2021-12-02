@@ -152,6 +152,7 @@ CREATE OR REPLACE TRIGGER T_운영체제_체크
     FOR EACH ROW
 BEGIN
     :NEW.운영체제이름 := F_운영체제_정규화(:NEW.운영체제이름);
+    DBMS_OUTPUT.PUT_LINE(:NEW.운영체제이름);
 END;
 
 
@@ -167,7 +168,7 @@ CREATE OR REPLACE TRIGGER T_CPU아키텍쳐_체크
     OF 아키텍쳐 ON CPU
     FOR EACH ROW
 BEGIN
-    IF :OLD.아키텍쳐 != 'x86' AND :OLD.아키텍쳐 != 'arm' THEN
+    IF :NEW.아키텍쳐 != 'x86' AND :NEW.아키텍쳐 != 'arm' THEN
         RAISE_APPLICATION_ERROR(-20000, '아키텍쳐는 x86 또는 arm 중 하나여야 합니다.');
     END IF;
 END;
@@ -185,7 +186,7 @@ CREATE OR REPLACE TRIGGER T_CPU브랜드_체크
     OF 브랜드 ON CPU
     FOR EACH ROW
 BEGIN
-    IF :OLD.브랜드 != 'Intel' AND :OLD.브랜드 != 'AMD' AND :OLD.브랜드 != 'Apple' THEN
+    IF :NEW.브랜드 != 'Intel' AND :NEW.브랜드 != 'AMD' AND :NEW.브랜드 != 'Apple' THEN
         RAISE_APPLICATION_ERROR(-20000, '브랜드는 Intel, AMD 또는 Apple 중 하나여야 합니다.');
     END IF;
 END;
@@ -202,7 +203,7 @@ CREATE OR REPLACE TRIGGER T_GPU브랜드_체크
     OF 브랜드 ON GPU
     FOR EACH ROW
 BEGIN
-    IF :OLD.브랜드 != 'Nvidia' AND :OLD.브랜드 != 'AMD' AND :OLD.브랜드 != 'Apple' AND :OLD.브랜드 != 'Intel' THEN
+    IF :NEW.브랜드 != 'Nvidia' AND :NEW.브랜드 != 'AMD' AND :NEW.브랜드 != 'Apple' AND :NEW.브랜드 != 'Intel' THEN
         RAISE_APPLICATION_ERROR(-20000, '브랜드는 Nvidia, AMD, Apple 또는 Intel 중 하나여야 합니다.');
     END IF;
 END;
